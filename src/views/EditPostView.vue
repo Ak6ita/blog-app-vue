@@ -1,18 +1,39 @@
 <template>
-  <div class="edit-post-container">
-    <p style="font-weight: bold; position: absolute; top: 82px">Title:</p>
-    <b-form-input v-model="postData.title" id="title" class="mb-2 w-50">
-    </b-form-input>
-    <p style="font-weight: bold; position: absolute; top: 153px">Text:</p>
-    <b-form-input
-      v-model="postData.description"
-      id="textarea-rows"
-      class="w-50"
-      rows="8"
-    >
-    </b-form-input>
-    <div class="mt-5">
-      <b-button variant="primary" @click="editPost">Edit</b-button>
+  <div class="container">
+    <div class="edit-post-container">
+      <div class="d-flex align-items-center">
+        <p style="font-weight: bold">Title:</p>
+        <div style="width: 100%" class="ms-2">
+          <b-form-input
+            v-model="postData.title"
+            id="title"
+            class="mb-2"
+            :state="titleState"
+          >
+          </b-form-input>
+          <b-form-invalid-feedback id="title-feedback">
+            This field is required.
+          </b-form-invalid-feedback>
+        </div>
+      </div>
+      <div class="d-flex align-items-center">
+        <p style="font-weight: bold">Text:</p>
+        <div style="width: 100%" class="ms-2">
+          <b-form-input
+            v-model="postData.description"
+            id="textarea-rows"
+            rows="8"
+            :state="descriptionState"
+          >
+          </b-form-input>
+          <b-form-invalid-feedback id="title-feedback">
+            This field is required.
+          </b-form-invalid-feedback>
+        </div>
+      </div>
+      <div class="mt-5">
+        <b-button variant="primary" @click="submit">Edit</b-button>
+      </div>
     </div>
   </div>
 </template>
@@ -25,9 +46,31 @@ export default {
         title: "",
         description: "",
       },
+      descriptionState: null,
+      titleState: null,
     };
   },
   methods: {
+    validateForm() {
+      this.descriptionState = null;
+      this.titleState = null;
+      let isFormValid = true;
+      if (!this.postData.title) {
+        this.titleState = false;
+        isFormValid = false;
+      }
+      if (!this.postData.description) {
+        this.descriptionState = false;
+        isFormValid = false;
+      }
+      return isFormValid;
+    },
+    async submit() {
+      if (!this.validateForm()) {
+        return;
+      }
+      await this.editPost();
+    },
     async getPostData() {
       const response = await fetch(
         `http://localhost:8000/posts/blog/${this.$route.params.id}`,
@@ -59,8 +102,6 @@ export default {
             body: JSON.stringify(requestData),
           }
         );
-        const responseData = await response.json();
-        this.postData = responseData;
         if (response.ok) {
           console.log("Post edited successfully.");
           this.$router.push({ name: "HomePage" });
@@ -74,6 +115,9 @@ export default {
   },
   async created() {
     await this.getPostData();
+    if (!localStorage.getItem("token")) {
+      this.$router.push({ name: "Login" });
+    }
   },
 };
 </script>

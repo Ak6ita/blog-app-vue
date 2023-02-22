@@ -20,6 +20,9 @@
       </b-input-group>
     </div>
     <h1 style="padding: 40px; text-align: center">{{ userData.username }}</h1>
+    <div class="text-center mb-5">
+      <b-button :to="{ name: 'CreatePosts' }">Create Post</b-button>
+    </div>
     <b-row align-h="center">
       <b-col md="6" v-for="post in posts" :key="post.id">
         <div style="max-width: 30rem" class="mb-3 mx-auto" align="center">
@@ -122,6 +125,9 @@ export default {
   async created() {
     await this.getUserData();
     await this.getPersonalPosts();
+    if (!localStorage.getItem("token")) {
+      this.$router.push({ name: "Login" });
+    }
   },
 };
 </script>

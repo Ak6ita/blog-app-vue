@@ -6,6 +6,7 @@ import PostCreateView from "../views/PostCreateView.vue"
 import EditPostView from "../views/EditPostView.vue"
 import HomePageView from "../views/HomePageView.vue"
 import UserPageView from "../views/UserPageView.vue"
+import NotFoundView from '../views/NotFoundView.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -38,6 +39,11 @@ const routes = [
     path: "/user/:username",
     name: "UserPage",
     component: UserPageView
+  },
+  {
+    path: '/:pathMatch(.*)*', //will match everything and put it under `$route.params.pathMatch`
+    name: 'NotFound',
+    component: NotFoundView
   }
 ]
 

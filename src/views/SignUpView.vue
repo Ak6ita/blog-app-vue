@@ -53,6 +53,10 @@
       </b-card-text>
 
       <b-button variant="primary" @click="signup">Sign Up</b-button>
+      <div class="mt-2">
+        <span>Already have an account?</span>
+        <router-link :to="{ name: 'Login' }"> Login </router-link>
+      </div>
       <b-alert class="mt-2" :show="visibleGeneralError" variant="danger">
         {{ generalErrorMsg }}
       </b-alert>
@@ -143,6 +147,11 @@ export default {
         this.visibleGeneralError = true;
       }
     },
+  },
+  created() {
+    if (localStorage.getItem("token")) {
+      this.$router.push({ name: "HomePage" });
+    }
   },
 };
 </script>

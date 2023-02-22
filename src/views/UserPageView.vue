@@ -88,6 +88,9 @@ export default {
   async created() {
     await this.getUserData();
     await this.getAllPosts();
+    if (!localStorage.getItem("token")) {
+      this.$router.push({ name: "Login" });
+    }
   },
 };
 </script>

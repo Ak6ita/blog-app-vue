@@ -30,6 +30,10 @@
           </b-form-invalid-feedback>
         </b-card-text>
         <b-button variant="primary" @click="login">Log In</b-button>
+        <div class="mt-2">
+          <span>Don't have an account?</span>
+          <router-link :to="{ name: 'SignUp' }"> Sign Up </router-link>
+        </div>
       </b-card>
     </div>
   </div>
@@ -90,6 +94,11 @@ export default {
         this.passwordValidationMsg = "Invalid credentials.";
       }
     },
+  },
+  created() {
+    if (localStorage.getItem("token")) {
+      this.$router.push({ name: "HomePage" });
+    }
   },
 };
 </script>

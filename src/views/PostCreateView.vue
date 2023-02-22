@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <b-row align-h="center">
-      <b-col cols="6">
+      <b-col md="6">
         <div class="create-post-card">
           <h1>Create Post</h1>
           <br />
@@ -31,10 +31,10 @@
                 class="w-100"
                 :state="descriptionState"
               ></b-form-input>
+              <b-form-invalid-feedback id="title-feedback">
+                This field is required.
+              </b-form-invalid-feedback>
             </div>
-            <b-form-invalid-feedback id="title-feedback">
-              This field is required.
-            </b-form-invalid-feedback>
             <br />
             <br />
           </div>
@@ -102,6 +102,11 @@ export default {
         this.posts.push(responseData);
       }
     },
+  },
+  async created() {
+    if (!localStorage.getItem("token")) {
+      this.$router.push({ name: "Login" });
+    }
   },
 };
 </script>
